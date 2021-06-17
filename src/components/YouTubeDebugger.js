@@ -2,6 +2,7 @@
 import React from 'react'
 
 class YouTubeDebugger extends React.Component {
+    //1. set initialState
     constructor() {
         super()
         this.state = {
@@ -15,35 +16,39 @@ class YouTubeDebugger extends React.Component {
             }
         }
     }
-
+    // Attempting to complete without hard coding - mutating state
     bitrateClick = () => {
+        console.log("This should be the bitrate value")
+        console.log({ ...this.state.settings.bitrate })
         this.setState(() => {
             return {
-                errors: [],
-                user: null,
                 settings: {
-                    bitrate: 12,
-                    video: {
-                        resolution: '1080p'
-                    }
+                    ...this.state.settings,
+                    bitrate: 12
                 }
             }
-        }
-
-        )
+        })
     }
 
+
+
     resolutionClick = () => {
+        //having issues with my environment. WIll be console logging to ensure data is accurate
+        console.log("This should be the resolution value")
+        console.log({ ...this.state.settings.video })
         this.setState(() => {
             return {
-                errors: [],
-                user: null,
+                //All i've done is make a copy of settings and within settings, make
+                //a copy of video because the spread operator kept appending the resolution key at the bottom of the 
+                //object. See https://reactjs.org/docs/optimizing-performance.html#the-power-of-not-mutating-data
                 settings: {
-                    bitrate: 8,
+                    ...this.state.settings,
                     video: {
-                        resolution: '720p'
+                        ...this.state.settings.video,
+                        resolution: "720p"
                     }
                 }
+
             }
         }
 
@@ -54,12 +59,13 @@ class YouTubeDebugger extends React.Component {
     render() {
         return (
             <div>
+                {/* 2. should update the bitrate when the `.bitrate` button is clicked */}
                 <button className="bitrate" onClick={this.bitrateClick}>
                     {this.state.settings.bitrate}
                 </button>
-
-                <button class="resolution" onClick = {this.resolutionClick}>
-                {this.state.settings.video.resolution}
+                {/* 3. should update the video resolution when the `.resolution` button is clicked */}
+                <button className="resolution" onClick={this.resolutionClick}>
+                    {this.state.settings.video.resolution}
                 </button>
             </div>
         )
